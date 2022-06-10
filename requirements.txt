@@ -1,0 +1,4 @@
+jupyter
+pandas
+numpy
+git+https://github.com/openskynetwork/opensky-api@main#egg=/opensky_api
