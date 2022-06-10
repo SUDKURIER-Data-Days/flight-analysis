@@ -3,3 +3,9 @@ pandas
 numpy
 git+https://github.com/openskynetwork/opensky-api@master#egg=opensky_api&subdirectory=python
 FlightRadarAPI
+CherryPy
+bcrypt
+pymongo
+jinja2
+dnspython
+python-dotenv

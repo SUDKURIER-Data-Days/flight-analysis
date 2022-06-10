@@ -1,0 +1,11 @@
+{% extends "layout.html" %}
+{% block content %}
+<div>
+    <h2>Enter the password</h2>
+    <form action="post" action="authenticate">
+        <label for="pwd">Password:</label>
+        <input type="password" id="pwd" name="pwd" minlength="8"><br><br>
+        <input type="submit">
+    </form>
+</div>
+{% endblock %}
