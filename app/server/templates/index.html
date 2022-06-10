@@ -1,0 +1,47 @@
+{% extends "layout.html" %}
+{% block jslibs %}
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.css">
+
+<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.js"></script>
+<script type="text/javascript">
+    $(document).ready( function () {
+        $('#index_table').DataTable().DataTable();
+    });
+</script>
+{% endblock %}
+{% block styles %}
+<style>
+    div {
+        margin-top: 10px;
+    }
+</style>
+
+{% endblock %}
+{% block content %}
+<div class="list-group">
+    <table id="index_table" class="display">
+        <thead>
+            <tr>
+                <th>Plane</th>
+                <th>Model</th>
+                <th>Origin</th>
+                <th>Destination</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in data %}
+            <tr>
+                <td><a class="list-group-item">{{item['data']['plane'}}</a></td>
+                <td><a class="list-group-item">{{item['data']['model']}</a></td>
+                <td><a class="list-group-item">{{item['data']['origin]}}</a></td>
+                <td><a class="list-group-item">{{item['data']['destination}}</a></td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+</div>
+<div>
+    <button class="btn btn-primary" onclick="location.href='add';" id="addVictim">Opfer einfügen</button>
+</div>
+{% endblock %}
