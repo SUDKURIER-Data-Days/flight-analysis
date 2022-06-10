@@ -11,6 +11,7 @@ import bcrypt
 
 import json
 import pickle
+from FlightRadar24.api import FlightRadar24API
 
 class AuthenticationModule:
     def __init__(self):
@@ -59,6 +60,7 @@ class AppServer:
 
         self.db = client.survey["data"]["flights"]
         self.realm = realm
+        self.fr_api_object = FlightRadar24API()
 
     def _render_template(self, tmpl_name, params={}):
         """
