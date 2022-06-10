@@ -15,7 +15,7 @@ import pickle
 class AuthenticationModule:
     def __init__(self):
         client = MongoClient(os.environ["MONGODB_URI"])
-        self.db = client.survey["data"]["authentication"]
+        self.db = client.flights["data"]["authentication"]
 
     def get_hashed_password(self, plain_text_password):
         # Hash a password for the first time
@@ -128,7 +128,7 @@ class AdminConsole(AppServer):
 
         try:
             self.enter_credentials_in_db("admin", "example1", "example-password1")
-            self.enter_credentials_in_db("survey", "example2", "example-password2")
+            self.enter_credentials_in_db("flights", "example2", "example-password2")
         except:
             pass
 

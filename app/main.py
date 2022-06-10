@@ -26,8 +26,8 @@ if __name__ == '__main__':
             'tools.staticdir.on': True,
             'tools.staticdir.dir': Path(__file__).parents[0].resolve().joinpath('static')
         }})
-    cherrypy.tree.mount(AppServer("survey"), '/survey', config =  {'/': {'tools.auth_basic.on': True,
-        'tools.auth_basic.realm': 'survey',
+    cherrypy.tree.mount(AppServer("flights"), '/flights', config =  {'/': {'tools.auth_basic.on': True,
+        'tools.auth_basic.realm': 'flights',
         'tools.auth_basic.checkpassword': AuthenticationModule().check_password_in_db}})
     cherrypy.tree.mount(AdminConsole("admin"), '/admin',  config =  {'/':{'tools.auth_basic.on': True,
         'tools.auth_basic.realm': 'admin',
