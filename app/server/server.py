@@ -57,6 +57,7 @@ class AppServer:
         print(client.list_database_names())
         # using collections instead of databases here now i think"f"]
 
+        self.db = client.survey["data"]["flights"]
         self.realm = realm
 
     def _render_template(self, tmpl_name, params={}):
