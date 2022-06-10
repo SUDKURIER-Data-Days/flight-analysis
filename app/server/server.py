@@ -119,6 +119,13 @@ class AppServer:
 
             return serve_file(save_file, "application/x-download", "attachment")
 
+    @cherrypy.expose
+    def index(self):
+        bounds_sg = self.fr_api_object.get_bounds({'br_y': 47.092566, 'tl_x': 7.888184, 'tl_y': 48.107431, 'br_x': 10.327148})
+        print(bounds_sg)
+        print(len(self.fr_api_object.get_flights(bounds=bounds_sg)))
+        return self._render_template('index.html', params={'title': "Index Page", "data": all_data, "admin_mode": admin_mode})
+
 
 class AdminConsole(AppServer):
     def __init__(self, realm):
