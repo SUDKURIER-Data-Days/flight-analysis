@@ -30,11 +30,11 @@
 
     <div class="column has-text-centered">
         <div class="content">
-        <p class="pb-2 ">Model: {{item['model']}}</p>
-        <p class="pb-2">Airline: {{item['airline']}}</p>
-        <p class="pb-2">Origin: {{item["origin"]}}</p>
-        <p class="pb-2">Destination: {{item["destination"]}}</p>
-        <p class="pb-2">Altitude: {{item['altitude']}}</p>
+        <p class="pb-2">Model: <span class="tag">{{item['model']}}</span></p>
+        <p class="pb-2">Airline: <span class="tag">{{item['airline']}}</span></p>
+        <p class="pb-2">Origin: <span class="tag">{{item["origin"]}}</span></p>
+        <p class="pb-2">Destination: <span class="tag">{{item["destination"]}}</span></p>
+        <p class="pb-2">Altitude: <span class="tag">{{item['altitude']}}</span></p>
         <figure class="image is-128x128" style="margin: auto">
             <img src={{item['img'][0]}} alt={{item['img'][1]}}>
         </figure>

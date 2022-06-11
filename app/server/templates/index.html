@@ -43,11 +43,6 @@
 </script>
 {% endblock %}
 {% block styles %}
-<style>
-    div {
-        margin-top: 10px;
-    }
-</style>
 
 {% endblock %}
 {% block content %}
@@ -74,10 +69,10 @@
             <tr>
                 <td style="display:none;"><a class="list-group-item">{{item["glider"]}}</a> </td>
                 <td>
-                    <figure class="image is-square">
+                    <figure class="image" style="width: 200px; height: 112px">
                          <img src={{item['img'][0]}} alt={{item['img'][0]}}>
                     </figure>
-                    <p style="display:none;">{{item['distance']}} </p>
+                    <p style="display:none;">{{item['distance']}}</p>
                 </td>
                 <td><p class="list-group-item">{{item['model']}}</p></td>
                 <td><p class="list-group-item">{{item['airline']}}</p></td>
