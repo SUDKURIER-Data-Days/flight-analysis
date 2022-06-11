@@ -2,7 +2,7 @@ from pathlib import Path
 import os
 
 import cherrypy
-from server import AppServer, AuthenticationModule, AdminConsole
+from app.server import AppServer, AuthenticationModule, AdminConsole
 from dotenv import load_dotenv
 from cherrypy.lib import auth_basic
 
