@@ -22,7 +22,7 @@
     <table id="index_table" class="display">
         <thead>
             <tr>
-                <th>Plane</th>
+                <th></th>
                 <th>Model</th>
                 <th>Origin</th>
                 <th>Destination</th>
@@ -31,10 +31,10 @@
         <tbody>
             {% for item in data %}
             <tr>
-                <td><a class="list-group-item">{{item['data']['plane'}}</a></td>
-                <td><a class="list-group-item">{{item['data']['model']}</a></td>
-                <td><a class="list-group-item">{{item['data']['origin]}}</a></td>
-                <td><a class="list-group-item">{{item['data']['destination}}</a></td>
+                <td><img src={{item['img']}} alt={{item['model']}}></td>
+                <td><a class="list-group-item">{{item['model']}}</a></td>
+                <td><a class="list-group-item">{{item["origin"]}}</a></td>
+                <td><a class="list-group-item">{{item["destination"]}}</a></td>
             </tr>
             {% endfor %}
         </tbody>
