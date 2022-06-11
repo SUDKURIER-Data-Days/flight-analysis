@@ -18,6 +18,13 @@
     function showPosition(position) {
         console.log(position.coords.latitude);
         console.log( position.coords.longitude);
+        // // TODO this is just a test value, far away from Bodensee
+        // latitude = 33.6;
+        // longitude = -84.7;
+        latitude = position.coords.latitude;
+        longitude = position.coords.longitude;
+
+        window.location.replace("index?latitude=" + latitude + "&longitude=" +longitude);
     }
 </script>
 {% endblock %}

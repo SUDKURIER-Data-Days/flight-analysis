@@ -141,8 +141,20 @@ class AppServer:
         else:
             admin_mode = False
 
+        if "latitude" in kwargs:
+            latitude = float(kwargs["latitude"])
+        else:
+            latitude = 47.68
+
+        if "longitude" in kwargs:
+            longitude = float(kwargs["longitude"])
+        else:
+            longitude = 9.1488
+
+        displacement_x = 0.25
+        displacement_y = 0.25
         # TODO need to pass user's location back from javascript/html
-        location = {'br_y': 47.092566, 'tl_x': 7.888184, 'tl_y': 48.107431, 'br_x': 10.327148}
+        location = {'br_y': latitude -displacement_y, 'tl_x': longitude - displacement_x, 'tl_y': latitude+displacement_y, 'br_x': longitude +displacement_x }
         bounds_sg = self.fr_api_object.get_bounds(location)
         print(bounds_sg)
         flights_in_sector = self.fr_api_object.get_flights(bounds=bounds_sg)
