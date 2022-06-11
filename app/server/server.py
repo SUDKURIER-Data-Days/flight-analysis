@@ -61,6 +61,13 @@ class AppServer:
         # using collections instead of databases here now i think"f"]
 
         self.db = client.survey["data"]["flights"]
+        self.user_db = client.survey["data"]["user_db"]
+
+        # check if user in user database, otherwise add them
+        self.current_user = cherrypy.request.login
+        if len(list(self.user_db.find({"user":self.current_user}))) == 0:
+            self.user_db.insert_one({'user': self.current_user, 'badges':[]})
+
         self.realm = realm
         self.fr_api_object = FlightRadar24API()
 
