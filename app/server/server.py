@@ -280,7 +280,7 @@ class AppServer:
         images = [f"../../static/badges/{badge_type}.png" if badge_type in user_curr_badges else f"../../static/images/unearned.png" for badge_type in possible_badges]
 
         return self._render_template("badges_list.html", \
-                                     params = images)
+                                     params = {"images":images})
     @cherrypy.expose
     def upload_file(self, starting_data):
         if "LOCAL" in os.environ and os.environ["LOCAL"]:
