@@ -115,6 +115,7 @@ class AppServer:
             temp_dict["altitude"] = int(flight_specific_dict["altitude"]/3.2808)
             temp_dict["latitude"] = flight_specific_dict["latitude"]
             temp_dict["longitude"] = flight_specific_dict["longitude"]
+            #TODO check for Luftrettung, Zeppelin, Airbus A380
 
             if (temp_dict["img"]
                 and temp_dict["img"][0] == "https://www.flightradar24.com/static/images/sideviews/thumbnails/GLID.jpg") \
@@ -126,12 +127,14 @@ class AppServer:
                 temp_dict["glider"] = True
             else:
                 temp_dict["glider"] = False
+            temp_dict["distance"] = str(round(
+                distance.euclidean((latitude, longitude, 0),
+                                   (temp_dict["latitude"], temp_dict["longitude"], 0)), 4)).zfill(7)
 
             if temp_dict["model"]:
                 cleaned_data.append(temp_dict)
 
-        return sorted(cleaned_data, key=lambda x: distance.euclidean((latitude, longitude, 0),
-                                                                    (x["latitude"], x["longitude"], 0)))
+        return sorted(cleaned_data, key=lambda x: x["distance"])
 
     def get_flights(self, longitude, latitude, displacement_x = 0.25, displacement_y = 0.25, demo=False):
         if demo:

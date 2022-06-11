@@ -13,10 +13,10 @@
                     return data[0] === "False";
                 });
             }
-            table.draw();
-            if (this.checked){
+            if (!this.checked){
                 $.fn.dataTable.ext.search.pop();
             }
+            table.draw();
         });
     });
 
@@ -73,12 +73,12 @@
             {% for item in data %}
             <tr>
                 <td style="display:none;"><a class="list-group-item">{{item["glider"]}}</a> </td>
-                <td><img src={{item['img'][0]}} alt={{item['img'][1]}} width="200" height="112"></td>
-                <td><a class="list-group-item">{{item['model']}}</a></td>
-                <td><a class="list-group-item">{{item['airline']}}</a></td>
-                <td><a class="list-group-item">{{item['altitude']}}</a></td>
-                <td><a class="list-group-item">{{item["origin"]}}</a></td>
-                <td><a class="list-group-item">{{item["destination"]}}</a></td>
+                <td><p style="display:none;">{{item['distance']}}</p><img src={{item['img'][0]}} alt={{item['img'][1]}} width="200" height="112"></td>
+                <td><p class="list-group-item">{{item['model']}}</p></td>
+                <td><p class="list-group-item">{{item['airline']}}</p></td>
+                <td><p class="list-group-item">{{item['altitude']}}</p></td>
+                <td><p class="list-group-item">{{item["origin"]}}</p></td>
+                <td><p class="list-group-item">{{item["destination"]}}</p></td>
             </tr>
             {% endfor %}
         </tbody>

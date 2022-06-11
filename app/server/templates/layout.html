@@ -19,12 +19,18 @@
     <title>{% if title %}{{title}}{% else %}Pokeplane Stop{% endif %}</title>
 </head>
 <body>
-{% block above_content %}
-{% endblock %}
-<div class="container">
-    {% block content %}
-    <p>Content goes here</p>
-    {% endblock %}
-</div>
+   <header class="level has-background-info" style="z-index: 99; position: relative;">
+        <div class="level-item">
+            <h2 class="subtitle py-3">Pokeplane Stop</h2>
+        </div>
+
+    </header>
+        {% block above_content %}
+        {% endblock %}
+        <div class="container">
+                {% block content %}
+
+                {% endblock %}
+        </div>
 </body>
 </html>
