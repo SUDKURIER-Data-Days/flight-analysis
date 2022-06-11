@@ -109,7 +109,7 @@ class AppServer:
                         temp_dict["img"] = flight_specific_dict["aircraft"]["images"]["large"][0]["src"], \
                                            temp_dict["model"]
                     except:
-                        temp_dict["img"] = None, "Sorry, no img found :/"
+                        temp_dict["img"] = "../static/images/ufo_placeholder.png", "We have no idea how this one looks"
             try:
                 temp_dict["airline"] = flight_specific_dict["airline"]["name"]
             except:
@@ -139,10 +139,17 @@ class AppServer:
                                          or "boeing 747" in temp_dict["model"].lower()
                                          or "boeing 777" in temp_dict["model"].lower()):
                 temp_dict["badge"] = "jumbo-plane"
+            elif temp_dict["img"][1] == "We have no idea how this one looks":
+                temp_dict["badge"] = "ufo"
             elif temp_dict["glider"]:
                 temp_dict["badge"] = "glider"
             else:
                 temp_dict["badge"] = ""
+
+            if temp_dict["badge"]:
+                temp_dict["badge_link"] = f'<a href="new_badge?badge_type={temp_dict["badge"]}">', '</a>'
+            else:
+                temp_dict["badge_link"] = '', ''
 
             temp_dict["distance"] = str(round(
                 distance.euclidean((latitude, longitude, 0),

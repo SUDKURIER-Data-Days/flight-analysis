@@ -1,8 +1,85 @@
 {% extends "layout.html" %}
 {% block content %}
-<div>
-    <img src={{image}} width="200" height="200" class="center">
-    <br>
-    {{ text|safe }}
+<a>
+    <span class="icon-text">
+      <span class="icon">
+        <i class="fas fa-home"></i>
+      </span>
+      <span>Home</span>
+    </span>
+</a>
+<div class="rect has-background-white" style="position:fixed; z-index: 2; ; ">
+    <svg viewBox="0 0 74.9 74.9" xmlns="http://www.w3.org/2000/svg" height="50%" width="50%"
+        style="position: absolute; top: 50%; left: 25%;">
+        <g transform="matrix(1.2723 0 0 1.2723 -9.9636 -10.188)" stroke="black">
+            <path
+                d="m35.167,23.996 .004-.104 .007-.1 .014-.098 .018-.094 .021-.09 .027-.087 .03-.084 .033-.08 .037-.08 .043-.072 .043-.073 .047-.066 .052-.064 .052-.06 .058-.058 .058-.055 .061-.052 .065-.046 .064-.044 .069-.04 .069-.039 .071-.034 .074-.031 .073-.028 .076-.023 .076-.022 .076-.018 .078-.013 .08-.013 .079-.007 .08-.004 .078-.001 .08.002 .08.006 .078.009 .078.013 .078.017 .076.018 .077.023 .076.026 .074.029 .072.033 .07.036 .071.039 .068.042 .063.047 .064.049 .064.053 .058.056 .055.061 .055.06 .046.068 .049.07 .042.072 .043.077 .036.08 .035.083 .027.086 .025.091 .022.093 .017.096 .014.101 .008.103 .004.106v9.333l13.075,7.885v3.486l-13.011-4.272v6.965l3.023,2.366v2.76l-4.667-1.444-4.666,1.444v-2.76l2.959-2.366v-6.965l-13.014,4.272v-3.486l12.883-7.885v-9.398z"
+                fill="#fff" />
+        </g>
+        <text x="27%" y="97%" class="small">Catch</text>
+    </svg>
 </div>
+<div class="columns">
+    <div class="column has-text-centered">
+        <div class="content">
+            <figure class="image is-128x128" style="margin: auto">
+                <img src={{image}} class="center">
+            </figure>
+                {{ text|safe }}
+    </div>
+</div>
+
+<script>
+    function getOffset(el) {
+        const rect = el.getBoundingClientRect();
+        return {
+            left: rect.left + window.scrollX,
+            top: rect.top + window.scrollY
+        };
+    }
+
+    var rect = document.getElementsByClassName("rect")
+    var columns = document.getElementsByClassName("column")
+    var header_height = document.getElementsByClassName("level")[0].style.height
+
+    for (let i = 0; i < columns.length; i++) {
+
+        let computedStyle = getComputedStyle(columns[i]);
+
+        var col_height = columns[i].clientHeight;  // height with padding
+        var col_width = columns[i].clientWidth;   // width with padding
+        col_height -= parseFloat(computedStyle.paddingTop) + parseFloat(computedStyle.paddingBottom);
+        col_width -= parseFloat(computedStyle.paddingLeft) + parseFloat(computedStyle.paddingRight);
+
+        var col_x = getOffset(columns[i]).left
+        var col_y = getOffset(columns[i]).top
+
+        rect[i].style.height = col_height + "px"
+        rect[i].style.width = col_width + 5 + "px"
+        rect[i].style.left = col_x + "px"
+        rect[i].style.top = header_height
+
+    }
+
+
+gsap.utils.toArray(".rect").forEach((el, i) => {
+  const tl = gsap.timeline({ paused: true, reversed: true });
+  tl
+  .to(el, {
+    y: -500,
+      duration: 1
+  })
+
+
+  el.addEventListener('click', function () {
+        if (tl.reversed()) {
+            tl.play();
+        } else {
+            tl.reverse();
+        }
+  })
+
+})
+
+</script>
 {% endblock %}

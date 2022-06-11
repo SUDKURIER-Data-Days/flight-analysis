@@ -59,7 +59,7 @@
                 <th></th>
                 <th>Model</th>
                 <th>Airline</th>
-                <th>Altitude [m]</th>
+                <th>Altitude</th>
                 <th>Origin</th>
                 <th>Destination</th>
             </tr>
@@ -69,14 +69,16 @@
             <tr>
                 <td style="display:none;"><a class="list-group-item">{{item["glider"]}}</a> </td>
                 <td>
+                    {{item['badge_link'][0]}}
                     <figure class="image" style="width: 200px; height: 112px">
                          <img src={{item['img'][0]}} alt={{item['img'][0]}}>
                     </figure>
+                    {{item['badge_link'][1]}}
                     <p style="display:none;">{{item['distance']}}</p>
                 </td>
                 <td><p class="list-group-item">{{item['model']}}</p></td>
                 <td><p class="list-group-item">{{item['airline']}}</p></td>
-                <td><p class="list-group-item">{{item['altitude']}} ft.</p></td>
+                <td><p class="list-group-item">{{item['altitude']}} m.</p></td>
                 <td><p class="list-group-item">{{item["origin"]}}</p></td>
                 <td><p class="list-group-item">{{item["destination"]}}</p></td>
             </tr>
