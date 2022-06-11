@@ -128,6 +128,43 @@ class AppServer:
 
         return cleaned_data
 
+    def get_flights(self, longitude, latitude, displacement_x = 0.25, displacement_y = 0.25):
+        location = {'br_y': latitude -displacement_y, 'tl_x': longitude - displacement_x, 'tl_y': latitude+displacement_y, 'br_x': longitude +displacement_x }
+        bounds_sg = self.fr_api_object.get_bounds(location)
+        print(bounds_sg)
+        flights_in_sector = self.fr_api_object.get_flights(bounds=bounds_sg)
+
+        print(len(flights_in_sector))
+        flights_in_sector_details = {}
+        for flight in flights_in_sector:
+            if flight.altitude > 100:
+                flight_details = self.fr_api_object.get_flight_details(flight.id)
+                if isinstance(flight_details, dict):
+                    flight_details["altitude"] = flight.altitude
+                    flights_in_sector_details[flight.id] = flight_details
+
+        self.db.insert_many(list(flights_in_sector_details.values())) # list of dictionaries
+
+        return self.clean_flight_details(flights_in_sector_details)
+
+    @cherrypy.expose
+    def pokeplane(self, **kwargs):
+        if "latitude" in kwargs:
+            latitude = float(kwargs["latitude"])
+        else:
+            latitude = 47.68
+
+        if "longitude" in kwargs:
+            longitude = float(kwargs["longitude"])
+        else:
+            longitude = 9.1488
+
+        cleaned_flights = self.get_flights(longitude, latitude)
+
+        return self._render_template('pokeplane.html', \
+                                     params={'title': "Index Page", \
+                                             "data": cleaned_flights} )
+
     @cherrypy.expose
     def index(self, **kwargs):
         """
@@ -151,28 +188,11 @@ class AppServer:
         else:
             longitude = 9.1488
 
-        displacement_x = 0.25
-        displacement_y = 0.25
-        # TODO need to pass user's location back from javascript/html
-        location = {'br_y': latitude -displacement_y, 'tl_x': longitude - displacement_x, 'tl_y': latitude+displacement_y, 'br_x': longitude +displacement_x }
-        bounds_sg = self.fr_api_object.get_bounds(location)
-        print(bounds_sg)
-        flights_in_sector = self.fr_api_object.get_flights(bounds=bounds_sg)
-
-        print(len(flights_in_sector))
-        flights_in_sector_details = {}
-        for flight in flights_in_sector:
-            if flight.altitude > 100:
-                flight_details = self.fr_api_object.get_flight_details(flight.id)
-                if isinstance(flight_details, dict):
-                    flight_details["altitude"] = flight.altitude
-                    flights_in_sector_details[flight.id] = flight_details
-
-        self.db.insert_many(list(flights_in_sector_details.values())) # list of dictionaries
+        cleaned_flights = self.get_flights(longitude, latitude)
 
         return self._render_template('index.html', \
                                      params={'title': "Index Page", \
-                                             "data": self.clean_flight_details(flights_in_sector_details), \
+                                             "data":  cleaned_flights, \
                                              "admin_mode": admin_mode})
 
 
