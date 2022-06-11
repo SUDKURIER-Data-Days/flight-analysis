@@ -163,7 +163,7 @@ class AppServer:
 
         return self._render_template('pokeplane.html', \
                                      params={'title': "Index Page", \
-                                             "data": cleaned_flights} )
+                                             "data": cleaned_flights[:6]} )
 
     @cherrypy.expose
     def index(self, **kwargs):
