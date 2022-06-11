@@ -89,17 +89,25 @@ class AppServer:
             try:
                 temp_dict["origin"] = flight_specific_dict["airport"]["origin"]["name"]
             except:
-                temp_dict["origin"] = None
+                temp_dict["origin"] = "Origin unknown :/"
             try:
                 temp_dict["destination"] = flight_specific_dict['airport']['destination']['name']
             except:
-                temp_dict["destination"] = None
+                temp_dict["destination"] = "Destination unknown :/"
             try:
-                temp_dict["img"] = flight_specific_dict["aircraft"]["images"]["thumbnails"][0]["src"]
+                temp_dict["img"] = flight_specific_dict["aircraft"]["images"]["thumbnails"][0]["src"], temp_dict["model"]
             except:
-                temp_dict["img"] = None
-
-            cleaned_data.append(temp_dict)
+                try:
+                    temp_dict["img"] = flight_specific_dict["aircraft"]["images"]["medium"][0]["src"], temp_dict[
+                        "model"]
+                except:
+                    try:
+                        temp_dict["img"] = flight_specific_dict["aircraft"]["images"]["large"][0]["src"], \
+                                           temp_dict["model"]
+                    except:
+                        temp_dict["img"] = None, "Sorry, no img found :/"
+            if temp_dict["model"]:
+                cleaned_data.append(temp_dict)
 
         return cleaned_data
 
@@ -125,8 +133,10 @@ class AppServer:
         print(len(flights_in_sector))
         flights_in_sector_details = {}
         for flight in flights_in_sector:
-            flights_in_sector_details[flight.id] = self.fr_api_object.get_flight_details(flight.id)
-
+            if flight.altitude > 100:
+                flight_details = self.fr_api_object.get_flight_details(flight.id)
+                if flight_details:
+                    flights_in_sector_details[flight.id] = flight_details
 
         self.db.insert_many(list(flights_in_sector_details.values())) # list of dictionaries
 

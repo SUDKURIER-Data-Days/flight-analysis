@@ -31,7 +31,7 @@
         <tbody>
             {% for item in data %}
             <tr>
-                <td><img src={{item['img']}} alt={{item['model']}}></td>
+                <td><img src={{item['img'][0]}} alt={{item['img'][1]}} width="200" height="112"></td>
                 <td><a class="list-group-item">{{item['model']}}</a></td>
                 <td><a class="list-group-item">{{item["origin"]}}</a></td>
                 <td><a class="list-group-item">{{item["destination"]}}</a></td>

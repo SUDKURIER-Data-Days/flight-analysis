@@ -33,7 +33,8 @@ flights = fr_api.get_flights(bounds=bounds_sg)
 print(len(flights))
 flights_in_sector_details = {}
 for flight in flights:
-    flights_in_sector_details[flight.id] = fr_api.get_flight_details(flight.id)
+    if flight.altitude > 100:
+        flights_in_sector_details[flight.id] = fr_api.get_flight_details(flight.id)
 
 for item in flights_in_sector_details.values():
     try:
