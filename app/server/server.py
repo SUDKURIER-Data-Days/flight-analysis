@@ -173,7 +173,13 @@ class AppServer:
         else:
             longitude = 9.1488
 
-        cleaned_flights = self.get_flights(longitude, latitude)
+        # TODO: this could check the boolean
+        if "demo" in kwargs:
+            demo = True
+        else:
+            demo = False
+
+        cleaned_flights = self.get_flights(longitude, latitude, demo=demo)
 
         return self._render_template('pokeplane.html', \
                                      params={'title': "Index Page", \
