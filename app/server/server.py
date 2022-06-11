@@ -114,7 +114,7 @@ class AppServer:
                         temp_dict["img"] = flight_specific_dict["aircraft"]["images"]["large"][0]["src"], \
                                            temp_dict["model"]
                     except:
-                        temp_dict["img"] = None, "Sorry, no img found :/"
+                        temp_dict["img"] = "../static/images/ufo_placeholder.png", "We have no idea how this one looks"
             try:
                 temp_dict["airline"] = flight_specific_dict["airline"]["name"]
             except:
@@ -146,6 +146,8 @@ class AppServer:
                 temp_dict["badge"] = "jumbo-plane"
             elif temp_dict["glider"]:
                 temp_dict["badge"] = "glider"
+            elif temp_dict["img"][1] == "We have no idea how this one looks":
+                temp_dict["badge"] = "ufo"
             else:
                 temp_dict["badge"] = ""
 
