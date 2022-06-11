@@ -38,15 +38,19 @@
             <tr>
                 <th></th>
                 <th>Model</th>
+                <th>Airline</th>
+                <th>Altitude [m]</th>
                 <th>Origin</th>
                 <th>Destination</th>
             </tr>
         </thead>
         <tbody>
-            {% for item in data %}
+            {% for item in data if not item["glider"] %}
             <tr>
                 <td><img src={{item['img'][0]}} alt={{item['img'][1]}} width="200" height="112"></td>
                 <td><a class="list-group-item">{{item['model']}}</a></td>
+                <td><a class="list-group-item">{{item['airline']}}</a></td>
+                <td><a class="list-group-item">{{item['altitude']}}</a></td>
                 <td><a class="list-group-item">{{item["origin"]}}</a></td>
                 <td><a class="list-group-item">{{item["destination"]}}</a></td>
             </tr>
@@ -54,4 +58,6 @@
         </tbody>
     </table>
 </div>
+
+
 {% endblock %}
