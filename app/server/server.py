@@ -122,7 +122,6 @@ class AppServer:
             temp_dict["altitude"] = int(flight_specific_dict["altitude"]/3.2808)
             temp_dict["latitude"] = flight_specific_dict["latitude"]
             temp_dict["longitude"] = flight_specific_dict["longitude"]
-            #TODO check for Luftrettung, Zeppelin, Airbus A380
 
             if (temp_dict["img"]
                 and temp_dict["img"][0] == "https://www.flightradar24.com/static/images/sideviews/thumbnails/GLID.jpg") \
@@ -134,6 +133,22 @@ class AppServer:
                 temp_dict["glider"] = True
             else:
                 temp_dict["glider"] = False
+
+            if temp_dict["airline"] and ("rettung" in temp_dict["airline"].lower()
+                                         or "ambulanz" in temp_dict["airline"].lower()):
+                temp_dict["badge"] = "rescue-helicopter"
+            elif temp_dict["model"] and "zeppelin" in temp_dict["model"].lower():
+                temp_dict["badge"] = "zeppelin"
+            elif temp_dict["model"] and ("airbus a350" in temp_dict["model"].lower()
+                                         or "airbus a380" in temp_dict["model"].lower()
+                                         or "boeing 747" in temp_dict["model"].lower()
+                                         or "boeing 777" in temp_dict["model"].lower()):
+                temp_dict["badge"] = "jumbo-plane"
+            elif temp_dict["glider"]:
+                temp_dict["badge"] = "glider"
+            else:
+                temp_dict["badge"] = ""
+
             temp_dict["distance"] = str(round(
                 distance.euclidean((latitude, longitude, 0),
                                    (temp_dict["latitude"], temp_dict["longitude"], 0)), 4)).replace(".", "").zfill(7)
