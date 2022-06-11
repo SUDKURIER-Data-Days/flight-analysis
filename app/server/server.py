@@ -135,7 +135,7 @@ class AppServer:
         for flight in flights_in_sector:
             if flight.altitude > 100:
                 flight_details = self.fr_api_object.get_flight_details(flight.id)
-                if isinstance(flight, dict):
+                if isinstance(flight_details, dict):
                     flights_in_sector_details[flight.id] = flight_details
 
         self.db.insert_many(list(flights_in_sector_details.values())) # list of dictionaries
