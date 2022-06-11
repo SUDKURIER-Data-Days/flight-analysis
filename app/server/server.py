@@ -227,6 +227,18 @@ class AppServer:
             return self._render_template("index.html")
 
     @cherrypy.expose
+    def new_badge(self, badge_type):
+        try:
+            with open(f"static/text/{badge_type}.txt", "r") as f:
+                lines = f.readlines()
+            return self._render_template("new_badge.html", \
+                                         params= {
+                                            "text":"\n".join(lines), \
+                                            "image":f"../../static/images/{badge_type}.png"})
+        except:
+            raise cherrypy.HTTPError(404, "No such badge")
+
+    @cherrypy.expose
     def upload_file(self, starting_data):
         if "LOCAL" in os.environ and os.environ["LOCAL"]:
             out_file = Path(__file__).resolve().parents[1].joinpath("static/data/out.json")
