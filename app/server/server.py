@@ -156,7 +156,7 @@ class AppServer:
 
         self.db.insert_many(list(flights_in_sector_details.values())) # list of dictionaries
 
-        return self.clean_flight_details(flights_in_sector_details, latitude, longitude)
+        return self.clean_flight_details(flights_in_sector_details, latitude, longitude, demo)
 
     @cherrypy.expose
     def pokeplane(self, **kwargs):
