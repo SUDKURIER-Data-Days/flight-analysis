@@ -256,7 +256,7 @@ class AppServer:
             if len(list(self.user_db.find({"user": cherrypy.request.login}))) == 0:
                 self.user_db.insert_one({'user': cherrypy.request.login, 'badges': []})
 
-            user_curr_badges = self.user_db.find({"user":cherrypy.request.login})
+            user_curr_badges = list(self.user_db.find({"user": cherrypy.request.login}))[0]["badges"]
             if badge_type not in user_curr_badges:
                 self.user_db.find_one_and_update({"user":cherrypy.request.login}, {"$set": {"badges": user_curr_badges + [badge_type]}})
 
