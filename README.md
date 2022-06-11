@@ -13,12 +13,12 @@ You can run this locally, setting up the database the first time is the hardest 
     > **_NOTE:_**  MongoDB actually doesn't create the database/document until an entry is inputted. So you don't have to do anything in the shell, although you could run `show dbs` later to verify the database was created.
 3. Create a .env file with the local `MONGODB_URI` in it along with the PORT you want to run the flights on `8080`, e.g.:
     ```
-    touch .env
+    touch app/.env
     echo "MONGODB_URI=localhost:27017" > .env
     echo "PORT=8080" >> .env
     echo "LOCAL=True" >> .env
     ```
-    >  ### Windows uers, create this file .env:
+    >  ### Windows users, create the file app/.env:
     >  ```
     > MONGODB_URI=localhost:27017
     > PORT=8080
@@ -29,5 +29,5 @@ You can run this locally, setting up the database the first time is the hardest 
     ```
     pip install -r requirements.txt
     ```
-5. Run main.py (`python main.py` on the command line)
+5. Run main.py (`python app/main.py` on the command line)
 6. Open up [0.0.0.0:8000](0.0.0.0:8080) in your web browser
