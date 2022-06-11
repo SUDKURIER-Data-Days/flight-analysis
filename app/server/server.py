@@ -3,6 +3,7 @@ from pathlib import Path
 from bson.objectid import ObjectId
 import os
 import cherrypy
+import requests
 from jinja2 import Environment, FileSystemLoader
 from pymongo import MongoClient
 
@@ -126,6 +127,15 @@ class AppServer:
         print(len(self.fr_api_object.get_flights(bounds=bounds_sg)))
         return self._render_template('index.html', params={'title': "Index Page", "data": all_data, "admin_mode": admin_mode})
 
+    @cherrypy.expose
+    def test_geolocation(self):
+        url = 'http://freegeoip.net/json/{}'.format(cherrypy.request.remote.ip)
+        print(url)
+        r = requests.get(url)
+        j = json.loads(r.text)
+        city = j['city']
+
+        print(city)
 
 class AdminConsole(AppServer):
     def __init__(self, realm):
@@ -137,6 +147,7 @@ class AdminConsole(AppServer):
         self.authentication = AuthenticationModule()
 
         try:
+            self.authentication.db.delete_many({})
             self.enter_credentials_in_db("admin", "example1", "example-password1")
             self.enter_credentials_in_db("flights", "example2", "example-password2")
         except:
