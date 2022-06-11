@@ -85,7 +85,7 @@ class AppServer:
             try:
                 temp_dict["model"] = flight_specific_dict['aircraft']['model']['text']
             except:
-                temp_dict["model"] = None
+                temp_dict["model"] = ""
             try:
                 temp_dict["origin"] = flight_specific_dict["airport"]["origin"]["name"]
             except:
@@ -106,6 +106,23 @@ class AppServer:
                                            temp_dict["model"]
                     except:
                         temp_dict["img"] = None, "Sorry, no img found :/"
+            try:
+                temp_dict["airline"] = flight_specific_dict["airline"]["name"]
+            except:
+                temp_dict["airline"] = "Airline unknown :/"
+            temp_dict["altitude"] = int(flight_specific_dict["altitude"]/3.2808)
+
+            if (temp_dict["img"]
+                and temp_dict["img"][0] == "https://www.flightradar24.com/static/images/sideviews/thumbnails/GLID.jpg") \
+                    or (temp_dict["airline"]
+                        and ("segel" in temp_dict["airline"].lower() or "glid" in temp_dict["airline"].lower())) \
+                    or (temp_dict["model"]
+                        and ("schempp-hirth" in temp_dict["model"].lower() or "lange" in temp_dict["model"].lower()
+                             or "alexander schleicher" in temp_dict["model"].lower())):
+                temp_dict["glider"] = True
+            else:
+                temp_dict["glider"] = False
+
             if temp_dict["model"]:
                 cleaned_data.append(temp_dict)
 
@@ -136,6 +153,7 @@ class AppServer:
             if flight.altitude > 100:
                 flight_details = self.fr_api_object.get_flight_details(flight.id)
                 if isinstance(flight_details, dict):
+                    flight_details["altitude"] = flight.altitude
                     flights_in_sector_details[flight.id] = flight_details
 
         self.db.insert_many(list(flights_in_sector_details.values())) # list of dictionaries
