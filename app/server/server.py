@@ -73,6 +73,45 @@ class AppServer:
         tmpl = self._env.get_template(tmpl_name)
         return tmpl.render(**params)
 
+    def clean_flight_details(self, flight_details_dict):
+        """
+
+        :param flight_details_dict:
+        :return: should output dictionary with model, origin, destination
+        """
+        # look if data is missing (missing destination, origin or model)
+        cleaned_data = []
+        for flight_id, flight_specific_dict in flight_details_dict.items():
+            temp_dict = {}
+            try:
+                temp_dict["model"] = flight_specific_dict['aircraft']['model']['text']
+            except:
+                temp_dict["model"] = None
+            try:
+                temp_dict["origin"] = flight_specific_dict["airport"]["origin"]["name"]
+            except:
+                temp_dict["origin"] = "Origin unknown :/"
+            try:
+                temp_dict["destination"] = flight_specific_dict['airport']['destination']['name']
+            except:
+                temp_dict["destination"] = "Destination unknown :/"
+            try:
+                temp_dict["img"] = flight_specific_dict["aircraft"]["images"]["thumbnails"][0]["src"], temp_dict["model"]
+            except:
+                try:
+                    temp_dict["img"] = flight_specific_dict["aircraft"]["images"]["medium"][0]["src"], temp_dict[
+                        "model"]
+                except:
+                    try:
+                        temp_dict["img"] = flight_specific_dict["aircraft"]["images"]["large"][0]["src"], \
+                                           temp_dict["model"]
+                    except:
+                        temp_dict["img"] = None, "Sorry, no img found :/"
+            if temp_dict["model"]:
+                cleaned_data.append(temp_dict)
+
+        return cleaned_data
+
     @cherrypy.expose
     def index(self, **kwargs):
         """
@@ -86,7 +125,27 @@ class AppServer:
         else:
             admin_mode = False
 
-        return self._render_template('index.html', params={'title': "Index Page", "data": all_data, "admin_mode": admin_mode})
+        # TODO need to pass user's location back from javascript/html
+        location = {'br_y': 47.092566, 'tl_x': 7.888184, 'tl_y': 48.107431, 'br_x': 10.327148}
+        bounds_sg = self.fr_api_object.get_bounds(location)
+        print(bounds_sg)
+        flights_in_sector = self.fr_api_object.get_flights(bounds=bounds_sg)
+
+        print(len(flights_in_sector))
+        flights_in_sector_details = {}
+        for flight in flights_in_sector:
+            if flight.altitude > 100:
+                flight_details = self.fr_api_object.get_flight_details(flight.id)
+                if flight_details:
+                    flights_in_sector_details[flight.id] = flight_details
+
+        self.db.insert_many(list(flights_in_sector_details.values())) # list of dictionaries
+
+        return self._render_template('index.html', \
+                                     params={'title': "Index Page", \
+                                             "data": self.clean_flight_details(flights_in_sector_details), \
+                                             "admin_mode": admin_mode})
+
 
     @cherrypy.expose
     def upload(self):
@@ -121,13 +180,6 @@ class AppServer:
             return serve_file(save_file, "application/x-download", "attachment")
 
     @cherrypy.expose
-    def index(self):
-        bounds_sg = self.fr_api_object.get_bounds({'br_y': 47.092566, 'tl_x': 7.888184, 'tl_y': 48.107431, 'br_x': 10.327148})
-        print(bounds_sg)
-        print(len(self.fr_api_object.get_flights(bounds=bounds_sg)))
-        return self._render_template('index.html', params={'title': "Index Page", "data": all_data, "admin_mode": admin_mode})
-
-    @cherrypy.expose
     def test_geolocation(self):
         url = 'http://freegeoip.net/json/{}'.format(cherrypy.request.remote.ip)
         print(url)
@@ -147,7 +199,6 @@ class AdminConsole(AppServer):
         self.authentication = AuthenticationModule()
 
         try:
-            self.authentication.db.delete_many({})
             self.enter_credentials_in_db("admin", "example1", "example-password1")
             self.enter_credentials_in_db("flights", "example2", "example-password2")
         except:

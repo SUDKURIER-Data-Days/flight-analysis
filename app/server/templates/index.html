@@ -22,7 +22,7 @@
     <table id="index_table" class="display">
         <thead>
             <tr>
-                <th>Plane</th>
+                <th></th>
                 <th>Model</th>
                 <th>Origin</th>
                 <th>Destination</th>
@@ -31,17 +31,17 @@
         <tbody>
             {% for item in data %}
             <tr>
-                <td><a class="list-group-item">{{item['data']['plane'}}</a></td>
-                {% if 'model' in item['data']}}
-                <td><a class="list-group-item">{{item['data']['model']}</a></td>
-                {% else %}
-                <td><a class="list-group-item">No model data</a></td>
-                {%endif %}
-                <td><a class="list-group-item">{{item['data']['origin]}}</a></td>
-                <td><a class="list-group-item">{{item['data']['destination}}</a></td>
+                <td><img src={{item['img'][0]}} alt={{item['img'][1]}} width="200" height="112"></td>
+                <td><a class="list-group-item">{{item['model']}}</a></td>
+                <td><a class="list-group-item">{{item["origin"]}}</a></td>
+                <td><a class="list-group-item">{{item["destination"]}}</a></td>
             </tr>
             {% endfor %}
         </tbody>
     </table>
+
+</div>
+<div>
+    <button class="btn btn-primary" onclick="location.href='add';" id="addVictim">Opfer einfügen</button>
 </div>
 {% endblock %}
