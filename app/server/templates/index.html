@@ -32,16 +32,16 @@
             {% for item in data %}
             <tr>
                 <td><a class="list-group-item">{{item['data']['plane'}}</a></td>
+                {% if 'model' in item['data']}}
                 <td><a class="list-group-item">{{item['data']['model']}</a></td>
+                {% else %}
+                <td><a class="list-group-item">No model data</a></td>
+                {%endif %}
                 <td><a class="list-group-item">{{item['data']['origin]}}</a></td>
                 <td><a class="list-group-item">{{item['data']['destination}}</a></td>
             </tr>
             {% endfor %}
         </tbody>
     </table>
-
-</div>
-<div>
-    <button class="btn btn-primary" onclick="location.href='add';" id="addVictim">Opfer einfügen</button>
 </div>
 {% endblock %}
