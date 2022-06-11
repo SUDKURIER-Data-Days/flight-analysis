@@ -3,7 +3,6 @@ from pathlib import Path
 from bson.objectid import ObjectId
 import os
 import cherrypy
-import requests
 from jinja2 import Environment, FileSystemLoader
 from pymongo import MongoClient
 
@@ -178,16 +177,6 @@ class AppServer:
                 pickle.dump(all_data, f)
 
             return serve_file(save_file, "application/x-download", "attachment")
-
-    @cherrypy.expose
-    def test_geolocation(self):
-        url = 'http://freegeoip.net/json/{}'.format(cherrypy.request.remote.ip)
-        print(url)
-        r = requests.get(url)
-        j = json.loads(r.text)
-        city = j['city']
-
-        print(city)
 
 class AdminConsole(AppServer):
     def __init__(self, realm):
