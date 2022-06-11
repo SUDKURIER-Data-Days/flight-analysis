@@ -62,12 +62,7 @@ class AppServer:
 
         self.db = client.survey["data"]["flights"]
         self.user_db = client.survey["data"]["user_db"]
-
-        # check if user in user database, otherwise add them
-        self.current_user = cherrypy.request.login
-        if len(list(self.user_db.find({"user":self.current_user}))) == 0:
-            self.user_db.insert_one({'user': self.current_user, 'badges':[]})
-
+        
         self.realm = realm
         self.fr_api_object = FlightRadar24API()
 
@@ -257,9 +252,13 @@ class AppServer:
             with open(f"static/text/{badge_type}.txt", "r") as f:
                 lines = f.readlines()
 
-            user_curr_badges = self.user_db.find({"user":self.self})
+            # check if user in user database, otherwise add them
+            if len(list(self.user_db.find({"user": cherrypy.request.login}))) == 0:
+                self.user_db.insert_one({'user': cherrypy.request.login, 'badges': []})
+
+            user_curr_badges = self.user_db.find({"user":cherrypy.request.login})
             if badge_type not in user_curr_badges:
-                self.user_db.find_one_and_update({"user": self.self}, {"$set": {"badges": user_curr_badges + [badge_type]}})
+                self.user_db.find_one_and_update({"user":cherrypy.request.login}, {"$set": {"badges": user_curr_badges + [badge_type]}})
 
             return self._render_template("new_badge.html", \
                                          params= {
@@ -268,6 +267,20 @@ class AppServer:
         except:
             raise cherrypy.HTTPError(404, "No such badge")
 
+    @cherrypy.expose
+    def badges_list(self):
+        possible_badges = [curr_file.stem for curr_file in sorted(list(Path(__file__).parents[1].joinpath("static/badges/").glob("*")))]
+
+        # check if user in user database, otherwise add them
+        if len(list(self.user_db.find({"user": cherrypy.request.login}))) == 0:
+            self.user_db.insert_one({'user': cherrypy.request.login, 'badges': []})
+
+        user_curr_badges = list(self.user_db.find({"user": cherrypy.request.login}))[0]["badges"]
+
+        images = [f"../../static/badges/{badge_type}.png" if badge_type in user_curr_badges else f"../../static/images/unearned.png" for badge_type in possible_badges]
+
+        return self._render_template("badges_list.html", \
+                                     params = images)
     @cherrypy.expose
     def upload_file(self, starting_data):
         if "LOCAL" in os.environ and os.environ["LOCAL"]:
