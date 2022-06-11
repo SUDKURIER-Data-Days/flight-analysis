@@ -73,10 +73,15 @@
             {% for item in data %}
             <tr>
                 <td style="display:none;"><a class="list-group-item">{{item["glider"]}}</a> </td>
-                <td><p style="display:none;">{{item['distance']}}</p><img src={{item['img'][0]}} alt={{item['img'][1]}} width="200" height="112"></td>
+                <td>
+                    <figure class="image is-square">
+                         <img src={{item['img'][0]}} alt={{item['img'][0]}}>
+                    </figure>
+                    <p style="display:none;">{{item['distance']}} </p>
+                </td>
                 <td><p class="list-group-item">{{item['model']}}</p></td>
                 <td><p class="list-group-item">{{item['airline']}}</p></td>
-                <td><p class="list-group-item">{{item['altitude']}}</p></td>
+                <td><p class="list-group-item">{{item['altitude']}} ft.</p></td>
                 <td><p class="list-group-item">{{item["origin"]}}</p></td>
                 <td><p class="list-group-item">{{item["destination"]}}</p></td>
             </tr>

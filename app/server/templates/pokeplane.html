@@ -29,14 +29,16 @@
     {% for item in data if not item["glider"] %}
 
     <div class="column has-text-centered">
-        <p class="pb-2">{{item['model']}}</p>
-        <p class="pb-2">{{item['airline']}}</p>
-        <p class="pb-2">{{item["origin"]}}</p>
-        <p class="pb-2">{{item["destination"]}}</p>
-        <p class="pb-2">>{{item['altitude']}}</p>
+        <div class="content">
+        <p class="pb-2 ">Model: {{item['model']}}</p>
+        <p class="pb-2">Airline: {{item['airline']}}</p>
+        <p class="pb-2">Origin: {{item["origin"]}}</p>
+        <p class="pb-2">Destination: {{item["destination"]}}</p>
+        <p class="pb-2">Altitude: {{item['altitude']}}</p>
         <figure class="image is-128x128" style="margin: auto">
             <img src={{item['img'][0]}} alt={{item['img'][1]}}>
         </figure>
+            </div>
     </div>
     {% endfor %}
 </div>

@@ -129,7 +129,7 @@ class AppServer:
                 temp_dict["glider"] = False
             temp_dict["distance"] = str(round(
                 distance.euclidean((latitude, longitude, 0),
-                                   (temp_dict["latitude"], temp_dict["longitude"], 0)), 4)).zfill(7)
+                                   (temp_dict["latitude"], temp_dict["longitude"], 0)), 4)).replace(".", "").zfill(7)
 
             if temp_dict["model"]:
                 cleaned_data.append(temp_dict)
