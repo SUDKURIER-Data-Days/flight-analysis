@@ -199,6 +199,7 @@ class AppServer:
         else:
             longitude = 9.1488
 
+        # TODO: this could check the boolean
         if "demo" in kwargs:
             demo = True
         else:
