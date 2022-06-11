@@ -5,9 +5,22 @@
 <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.js"></script>
 <script type="text/javascript">
     $(document).ready( function () {
-        $('#index_table').DataTable().DataTable();
+        $('#index_table').DataTable();
     });
+
+    function getLocation() {
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(showPosition);
+      } else {
+        console.log("Geolocation is not supported by this browser.");
+      }
+    }
+    function showPosition(position) {
+        console.log(position.coords.latitude);
+        console.log( position.coords.longitude);
+    }
 </script>
+<script type="text/javascript" charset="utf8" src="../static/js/geolocation.js"></script>
 {% endblock %}
 {% block styles %}
 <style>
@@ -19,6 +32,7 @@
 {% endblock %}
 {% block content %}
 <div class="list-group">
+    <button class="btn btn-primary" onclick= showPosition(); id="getLocation">Get my location!</button>
     <table id="index_table" class="display">
         <thead>
             <tr>
