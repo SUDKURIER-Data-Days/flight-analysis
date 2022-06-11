@@ -13,6 +13,8 @@ import json
 import pickle
 from FlightRadar24.api import FlightRadar24API
 
+from scipy.spatial import distance
+
 class AuthenticationModule:
     def __init__(self):
         client = MongoClient(os.environ["MONGODB_URI"])
@@ -72,7 +74,7 @@ class AppServer:
         tmpl = self._env.get_template(tmpl_name)
         return tmpl.render(**params)
 
-    def clean_flight_details(self, flight_details_dict):
+    def clean_flight_details(self, flight_details_dict, latitude, longitude):
         """
 
         :param flight_details_dict:
@@ -111,6 +113,8 @@ class AppServer:
             except:
                 temp_dict["airline"] = "Airline unknown :/"
             temp_dict["altitude"] = int(flight_specific_dict["altitude"]/3.2808)
+            temp_dict["latitude"] = flight_specific_dict["latitude"]
+            temp_dict["longitude"] = flight_specific_dict["longitude"]
 
             if (temp_dict["img"]
                 and temp_dict["img"][0] == "https://www.flightradar24.com/static/images/sideviews/thumbnails/GLID.jpg") \
@@ -126,7 +130,8 @@ class AppServer:
             if temp_dict["model"]:
                 cleaned_data.append(temp_dict)
 
-        return cleaned_data
+        return sorted(cleaned_data, key=lambda x: distance.euclidean((latitude, longitude, 0),
+                                                                    (x["latitude"], x["longitude"], 0)))
 
     def get_flights(self, longitude, latitude, displacement_x = 0.25, displacement_y = 0.25):
         location = {'br_y': latitude -displacement_y, 'tl_x': longitude - displacement_x, 'tl_y': latitude+displacement_y, 'br_x': longitude +displacement_x }
@@ -141,11 +146,13 @@ class AppServer:
                 flight_details = self.fr_api_object.get_flight_details(flight.id)
                 if isinstance(flight_details, dict):
                     flight_details["altitude"] = flight.altitude
+                    flight_details["longitude"] = flight.longitude
+                    flight_details["latitude"] = flight.latitude
                     flights_in_sector_details[flight.id] = flight_details
 
         self.db.insert_many(list(flights_in_sector_details.values())) # list of dictionaries
 
-        return self.clean_flight_details(flights_in_sector_details)
+        return self.clean_flight_details(flights_in_sector_details, latitude, longitude)
 
     @cherrypy.expose
     def pokeplane(self, **kwargs):

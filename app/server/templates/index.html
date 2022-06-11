@@ -5,8 +5,22 @@
 <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.js"></script>
 <script type="text/javascript">
     $(document).ready( function () {
-        $('#index_table').DataTable();
+        var table = $('#index_table').DataTable();
+        $('#hide_gliders').on('click', function () {
+            if (this.checked){
+                $.fn.dataTable.ext.search.push(function (settings, data, dataIndex) {
+                    console.log(data)
+                    return data[0] === "False";
+                });
+            }
+            table.draw();
+            if (this.checked){
+                $.fn.dataTable.ext.search.pop();
+            }
+        });
     });
+
+
 
     function getLocation() {
       if (navigator.geolocation) {
@@ -38,10 +52,15 @@
 {% endblock %}
 {% block content %}
 <div class="list-group">
-    <button class="btn btn-primary" onclick="getLocation()"; id="getLocation">Get my location!</button>
+    <button class="btn btn-primary" onclick="getLocation()" id="getLocation">Get my location!</button>
+    <div>
+        <input type="checkbox" id="hide_gliders" name="hide_gliders">
+        <label for="hide_gliders">Hide gliders</label>
+    </div>
     <table id="index_table" class="display">
         <thead>
             <tr>
+                <th style="display:none;"></th>
                 <th></th>
                 <th>Model</th>
                 <th>Airline</th>
@@ -51,8 +70,9 @@
             </tr>
         </thead>
         <tbody>
-            {% for item in data if not item["glider"] %}
+            {% for item in data %}
             <tr>
+                <td style="display:none;"><a class="list-group-item">{{item["glider"]}}</a> </td>
                 <td><img src={{item['img'][0]}} alt={{item['img'][1]}} width="200" height="112"></td>
                 <td><a class="list-group-item">{{item['model']}}</a></td>
                 <td><a class="list-group-item">{{item['airline']}}</a></td>
