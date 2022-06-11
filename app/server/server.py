@@ -62,7 +62,10 @@ class AppServer:
 
         self.db = client.survey["data"]["flights"]
         self.user_db = client.survey["data"]["user_db"]
-        
+
+        # TODO: hack since we don't have real users
+        self.user_db.delete_many({})
+
         self.realm = realm
         self.fr_api_object = FlightRadar24API()
 
