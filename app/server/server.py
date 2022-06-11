@@ -241,10 +241,15 @@ class AppServer:
         try:
             with open(f"static/text/{badge_type}.txt", "r") as f:
                 lines = f.readlines()
+
+            user_curr_badges = self.user_db.find({"user":self.self})
+            if badge_type not in user_curr_badges:
+                self.user_db.find_one_and_update({"user": self.self}, {"$set": {"badges": user_curr_badges + [badge_type]}})
+
             return self._render_template("new_badge.html", \
                                          params= {
                                             "text":"\n".join(lines), \
-                                            "image":f"../../static/images/{badge_type}.png"})
+                                            "image":f"../../static/badges/{badge_type}.png"})
         except:
             raise cherrypy.HTTPError(404, "No such badge")
 
